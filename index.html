@@ -4,8 +4,8 @@
 <script>
     var canvas;
     var canvasContext;
-    var ballX = 50;
-    var ballY = 50;
+    var ballX = 250;
+    var ballY = 250;
     var ballSpeedX = 500; // px/sec
     var ballSpeedY = 200; // px/sec
 
@@ -39,6 +39,11 @@
 
     function moveEverything(refreshingInterval) {
         //moving ball
+        if ((ballX <= 20) && (!checkIfBallBounced(paddle1Y+PADDLE_HEIGHT/2, ballY))) {
+          resetBall();
+          return;
+        }
+
         (ballX >= canvas.width - 15) || (ballX <= 20) ? ballSpeedX = -ballSpeedX : null;
         (ballY >= canvas.height - 15) || (ballY <= 20) ? ballSpeedY = -ballSpeedY : null;
         ballX = ballX + ballSpeedX/refreshingInterval;
@@ -78,6 +83,16 @@
         }
     }
 
+    function checkIfBallBounced (paddleY, ballY){
+        return ((((ballY - paddleY) <= PADDLE_HEIGHT/2)) && ((ballY - paddleY) >= -PADDLE_HEIGHT/2)) ? true : false;
+    }
+
+    function resetBall(){
+        ballX = 250;
+        ballY = 250;
+        ballSpeedX = 500; // px/sec
+        ballSpeedY = 200; // px/sec
+    }
 
 </script>
 
