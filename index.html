@@ -14,6 +14,9 @@
     const PADDLE_HEIGHT = 80;
     const PADDLE_WIDTH = 15;
 
+    var player1Score = 0;
+    var player2Score = 0;
+
     window.onload = function() {
         console.log('We are starting');
 
@@ -43,11 +46,13 @@
         //checking if ball get bounced from left paddle
         if ((ballX <= 20) && (!checkIfBallBounced(paddle1Y+PADDLE_HEIGHT/2, ballY))) {
           resetBall();
+          player2Score++;
           return;
         }
         //checking if ball get bounced from right paddle
         if ((ballX >= canvas.width - 15) && (!checkIfBallBounced(paddle2Y+PADDLE_HEIGHT/2, ballY))) {
             resetBall();
+            player1Score++;
             return;
         }
 
@@ -69,6 +74,8 @@
         colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'blue');
         // drawing ball
         colorCircle(ballX, ballY, 20, 'white');
+
+        canvasContext.fillText('Player1: ' + player1Score + '   ' + 'Player2: ' + player2Score , canvas.width/2 - 75, 25);
     }
 
     function colorCircle(centerX, centerY, radius, color) {
@@ -108,8 +115,8 @@
     function computerMovement() {
         var paddle2YCenter = paddle2Y + PADDLE_HEIGHT/2;
         //podążanie rakietki za piłką
-        paddle2YCenter < ballY - 35 ? paddle2Y += 10 : null;
-        paddle2YCenter > ballY + 35 ? paddle2Y -= 10 : null;
+        paddle2YCenter < ballY - 35 ? paddle2Y += 7 : null;
+        paddle2YCenter > ballY + 35 ? paddle2Y -= 7 : null;
     }
 </script>
 
