@@ -10,6 +10,7 @@
     var ballSpeedY = 200; // px/sec
 
     var paddle1Y = 250;
+    var paddle2Y = 250;
     const PADDLE_HEIGHT = 80;
     const PADDLE_WIDTH = 15;
 
@@ -33,15 +34,22 @@
         canvas.addEventListener('mousemove', function(evt){
             var mousePos = calculateMousePos(evt);
             paddle1Y = mousePos.y - PADDLE_HEIGHT/2;
+            paddle2Y = mousePos.y - PADDLE_HEIGHT/2;
         })
 
     }
 
     function moveEverything(refreshingInterval) {
         //moving ball
+        //checking if ball get bounced from left paddle
         if ((ballX <= 20) && (!checkIfBallBounced(paddle1Y+PADDLE_HEIGHT/2, ballY))) {
           resetBall();
           return;
+        }
+        //checking if ball get bounced from right paddle
+        if ((ballX >= canvas.width - 15) && (!checkIfBallBounced(paddle2Y+PADDLE_HEIGHT/2, ballY))) {
+            resetBall();
+            return;
         }
 
         (ballX >= canvas.width - 15) || (ballX <= 20) ? ballSpeedX = -ballSpeedX : null;
@@ -56,6 +64,8 @@
         colorRect(0, 0, canvas.width, canvas.height, 'black');
         // drawing left player paddle
         colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'red');
+        // drawing right computer paddle
+        colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'blue');
         // drawing ball
         colorCircle(ballX, ballY, 20, 'white');
     }
@@ -88,10 +98,10 @@
     }
 
     function resetBall(){
-        ballX = 250;
-        ballY = 250;
+        ballX = 400;
+        ballY = 350;
         ballSpeedX = 500; // px/sec
-        ballSpeedY = 200; // px/sec
+        ballSpeedY = -200; // px/sec
     }
 
 </script>
