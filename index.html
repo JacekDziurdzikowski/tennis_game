@@ -34,7 +34,6 @@
         canvas.addEventListener('mousemove', function(evt){
             var mousePos = calculateMousePos(evt);
             paddle1Y = mousePos.y - PADDLE_HEIGHT/2;
-            paddle2Y = mousePos.y - PADDLE_HEIGHT/2;
         })
 
     }
@@ -56,6 +55,8 @@
         (ballY >= canvas.height - 15) || (ballY <= 20) ? ballSpeedY = -ballSpeedY : null;
         ballX = ballX + ballSpeedX/refreshingInterval;
         ballY = ballY + ballSpeedY/refreshingInterval;
+
+        computerMovement();
     }
 
     function drawEverything(hehe) {
@@ -104,6 +105,12 @@
         ballSpeedY = -200; // px/sec
     }
 
+    function computerMovement() {
+        var paddle2YCenter = paddle2Y + PADDLE_HEIGHT/2;
+        //podążanie rakietki za piłką
+        paddle2YCenter < ballY - 35 ? paddle2Y += 10 : null;
+        paddle2YCenter > ballY + 35 ? paddle2Y -= 10 : null;
+    }
 </script>
 
 </html>
