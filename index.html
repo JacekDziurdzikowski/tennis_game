@@ -12,7 +12,7 @@
     var paddle1Y = 250;
     var paddle2Y = 250;
     const PADDLE_HEIGHT = 80;
-    const PADDLE_WIDTH = 15;
+    const PADDLE_WIDTH = 14;
 
     var player1Score = 0;
     var player2Score = 0;
@@ -42,22 +42,35 @@
     }
 
     function moveEverything(refreshingInterval) {
+        var winner;
         //moving ball
         //checking if ball get bounced from left paddle
         if ((ballX <= 20) && (!checkIfBallBounced(paddle1Y+PADDLE_HEIGHT/2, ballY))) {
-          resetBall();
-          player2Score++;
-          return;
+            winner = 2;
+            resetBall(winner);
+            return;
         }
         //checking if ball get bounced from right paddle
         if ((ballX >= canvas.width - 15) && (!checkIfBallBounced(paddle2Y+PADDLE_HEIGHT/2, ballY))) {
-            resetBall();
-            player1Score++;
+            winner = 1;
+            resetBall(winner);
             return;
         }
-
-        (ballX >= canvas.width - 15) || (ballX <= 20) ? ballSpeedX = -ballSpeedX : null;
+        //bouncing off player 1 paddle
+        if (ballX <= 20) {
+            ballSpeedX = -ballSpeedX;
+            var deltaY = ballY - (paddle1Y + PADDLE_HEIGHT/2);
+            ballSpeedY = deltaY * 10;
+        }
+        //bouncing off player 2 paddle
+        if (ballX >= canvas.width - 15) {
+            ballSpeedX = -ballSpeedX;
+            var deltaY = ballY - paddle2Y;
+            ballSpeedY = deltaY * 10;
+        }
+        //bouncing off the wall
         (ballY >= canvas.height - 15) || (ballY <= 20) ? ballSpeedY = -ballSpeedY : null;
+
         ballX = ballX + ballSpeedX/refreshingInterval;
         ballY = ballY + ballSpeedY/refreshingInterval;
 
@@ -73,7 +86,7 @@
         // drawing right computer paddle
         colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'blue');
         // drawing ball
-        colorCircle(ballX, ballY, 20, 'white');
+        colorCircle(ballX, ballY, 10, 'white');
 
         canvasContext.fillText('Player1: ' + player1Score + '   ' + 'Player2: ' + player2Score , canvas.width/2 - 75, 25);
     }
@@ -105,11 +118,12 @@
         return ((((ballY - paddleY) <= PADDLE_HEIGHT/2)) && ((ballY - paddleY) >= -PADDLE_HEIGHT/2)) ? true : false;
     }
 
-    function resetBall(){
+    function resetBall(winner){
         ballX = 400;
         ballY = 350;
         ballSpeedX = 500; // px/sec
         ballSpeedY = -200; // px/sec
+        winner === 1 ? player1Score++ : player2Score++;
     }
 
     function computerMovement() {
