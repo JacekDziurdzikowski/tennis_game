@@ -16,6 +16,11 @@
 
     var player1Score = 0;
     var player2Score = 0;
+    const WINNING_SCORE = 3;
+
+    var winnerName = null;
+    var isSummationDispalaying = false;
+    var summationDisplayingStartTimestamp = null;
 
     window.onload = function() {
         console.log('We are starting');
@@ -30,8 +35,13 @@
 
         //Starts the game;
         setInterval(function(){
-            moveEverything(refreshingInterval);
-            drawEverything();
+            if (!isSummationDispalaying){
+                moveEverything(refreshingInterval);
+                drawEverything();
+            }
+            else {
+                drawSummation();
+            }
         }, refreshingInterval);
 
         canvas.addEventListener('mousemove', function(evt){
@@ -77,8 +87,9 @@
         computerMovement();
     }
 
-    function drawEverything(hehe) {
-        console.log(hehe);
+    function drawEverything() {
+
+        console.log('hehe');
         // drawing black background for the game
         colorRect(0, 0, canvas.width, canvas.height, 'black');
         // drawing left player paddle
@@ -88,7 +99,9 @@
         // drawing ball
         colorCircle(ballX, ballY, 10, 'white');
 
-        canvasContext.fillText('Player1: ' + player1Score + '   ' + 'Player2: ' + player2Score , canvas.width/2 - 75, 25);
+        canvasContext.fillText('Player1: ' + player1Score + '   ' + 'Player2: ' + player2Score, canvas.width / 2 - 75, 25);
+
+
     }
 
     function colorCircle(centerX, centerY, radius, color) {
@@ -123,7 +136,17 @@
         ballY = 350;
         ballSpeedX = 500; // px/sec
         ballSpeedY = -200; // px/sec
+
+        //scoring
         winner === 1 ? player1Score++ : player2Score++;
+        //In case there is a winner:
+        if (player1Score >= WINNING_SCORE || player2Score >= WINNING_SCORE){
+            winnerName = player1Score > player2Score ? 'Player 1' : 'Player 2';
+            isSummationDispalaying = true
+            summationDisplayingStartTimestamp = Date.now();
+            player1Score = 0;
+            player2Score = 0;
+        }
     }
 
     function computerMovement() {
@@ -132,6 +155,18 @@
         paddle2YCenter < ballY - 35 ? paddle2Y += 7 : null;
         paddle2YCenter > ballY + 35 ? paddle2Y -= 7 : null;
     }
+
+    function drawSummation() {
+        colorRect(0, 0, canvas.width, canvas.height, 'red');
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillText(winnerName + ' won!', canvas.width / 2 - 30, 300);
+        if(Date.now() - summationDisplayingStartTimestamp > 3000){
+            winnerName = null;
+            summationDisplayingStartTimestamp = null;
+            isSummationDispalaying = false;
+        }
+    }
+
 </script>
 
 </html>
