@@ -105,12 +105,20 @@
         colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'red');
         // drawing right computer paddle
         colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'blue');
+        //drawing net
+        drawNet();
         // drawing ball
         colorCircle(ballX, ballY, 10, 'white');
 
-        canvasContext.fillText('Player1: ' + player1Score + '   ' + 'Player2: ' + player2Score, canvas.width / 2 - 75, 25);
+        canvasContext.fillText('Player1: ' + player1Score + '             ' + 'Player2: ' + player2Score, canvas.width / 2 - 65, 25);
 
 
+    }
+
+    function drawNet() {
+        for(var i=20; i+20 < canvas.height; i += 40){
+            colorRect(canvas.width/2 - 2, i, 4, 20, 'white');
+        }
     }
 
     function colorCircle(centerX, centerY, radius, color) {
